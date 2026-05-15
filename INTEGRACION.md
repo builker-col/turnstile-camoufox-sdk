@@ -216,4 +216,4 @@ En el repositorio del SDK, `examples/minimal.py` usa esa URL por defecto.
 ## Referencias
 
 - README principal del paquete: [README.md](README.md)
-- Repositorio: [turnstile-camoufox-sdk](https://github.com/builker-labs/turnstile-camoufox-sdk)
+- Repositorio: [turnstile-camoufox-sdk](https://github.com/builker-col/turnstile-camoufox-sdk)

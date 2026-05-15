@@ -14,9 +14,9 @@ Requiere variables de entorno o argumentos para pesos en modo YOLO
 (ver README del paquete ``camoufox-turnstile``).
 """
 
-DEFAULT_LAB_URL = "https://turnstile-lab.builker.com/"
-
 from __future__ import annotations
+
+DEFAULT_LAB_URL = "https://turnstile-lab.builker.com/"
 
 import argparse
 import asyncio

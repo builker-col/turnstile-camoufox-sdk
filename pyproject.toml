@@ -38,9 +38,9 @@ s3 = ["boto3>=1.28.0"]
 dev = ["pytest>=7.4.0", "pytest-asyncio>=0.23.0", "build>=1.0.0"]
 
 [project.urls]
-Homepage = "https://github.com/builker-labs/turnstile-camoufox-sdk"
-Repository = "https://github.com/builker-labs/turnstile-camoufox-sdk"
-Issues = "https://github.com/builker-labs/turnstile-camoufox-sdk/issues"
+Homepage = "https://github.com/builker-col/turnstile-camoufox-sdk"
+Repository = "https://github.com/builker-col/turnstile-camoufox-sdk"
+Issues = "https://github.com/builker-col/turnstile-camoufox-sdk/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

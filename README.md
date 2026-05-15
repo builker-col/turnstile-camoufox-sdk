@@ -13,7 +13,7 @@ SDK en Python para integrar **Cloudflare Turnstile** en scrapers o automatizacio
 
 Para probar el SDK puedes usar el **Turnstile Lab** público: [https://turnstile-lab.builker.com/](https://turnstile-lab.builker.com/) (es la URL por defecto del ejemplo `examples/minimal.py`).
 
-**Guía paso a paso para integrarlo en cualquier proyecto Python:** [INTEGRACION.md](https://github.com/builker-labs/turnstile-camoufox-sdk/blob/main/INTEGRACION.md) (enlace absoluto para lectura desde [PyPI](https://pypi.org/project/camoufox-turnstile/)).
+**Guía paso a paso para integrarlo en cualquier proyecto Python:** [INTEGRACION.md](https://github.com/builker-col/turnstile-camoufox-sdk/blob/main/INTEGRACION.md) (enlace absoluto para lectura desde [PyPI](https://pypi.org/project/camoufox-turnstile/)).
 
 ```bash
 pip install camoufox-turnstile
@@ -130,7 +130,7 @@ Comprueba el wheel en un venv limpio con `pip install dist/camoufox_turnstile-*.
 ### Publicar en PyPI
 
 1. Comprueba en [pypi.org](https://pypi.org/) que el nombre del proyecto (`camoufox-turnstile`) esté libre y crea el proyecto en tu cuenta.
-2. **Trusted Publishing (recomendado):** en la configuración del proyecto en PyPI, añade un *Trusted Publisher* que apunte a este repositorio y al workflow [`.github/workflows/publish-pypi.yml`](https://github.com/builker-labs/turnstile-camoufox-sdk/blob/main/.github/workflows/publish-pypi.yml) **antes** del primer envío por CI. Documentación: [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publishers/) y [Publishing with a trusted publisher](https://docs.pypi.org/trusted-publishers/publishing/).
+2. **Trusted Publishing (recomendado):** en la configuración del proyecto en PyPI, añade un *Trusted Publisher* que apunte a este repositorio y al workflow [`.github/workflows/publish-pypi.yml`](https://github.com/builker-col/turnstile-camoufox-sdk/blob/main/.github/workflows/publish-pypi.yml) **antes** del primer envío por CI. Documentación: [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publishers/) y [Publishing with a trusted publisher](https://docs.pypi.org/trusted-publishers/publishing/).
 3. Sube la versión en `pyproject.toml` y crea un tag semántico en Git, p. ej. `git tag v0.1.0 && git push origin v0.1.0`. El workflow construye el paquete y lo publica con OIDC (sin contraseña en el repo).
 4. **Alternativa manual:** tras `python -m build`, sube con `twine upload dist/*` y un [API token de PyPI](https://pypi.org/help/#apitoken) (no commitear secretos). Guía PyPA: [Packaging Python Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/).
 
@@ -144,4 +144,4 @@ Respeta los términos de uso del sitio objetivo y la legislación aplicable. Est
 
 Proyecto de referencia (experimento): repositorio **turnstile-security-lab** (`experiments/camoufox_yolo_turnstile`).
 
-Repositorio del SDK: https://github.com/builker-labs/turnstile-camoufox-sdk
+Repositorio del SDK: https://github.com/builker-col/turnstile-camoufox-sdk
