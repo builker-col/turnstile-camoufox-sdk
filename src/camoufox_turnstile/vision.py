@@ -321,7 +321,7 @@ def suggest_click_from_image(
 
 
 def load_yolo_detector(weights_path: Path) -> YoloTurnstileDetector:
-    """Carga el detector YOLO; ``ImportError`` si faltan dependencias del extra ``[yolo]``."""
+    """Carga el detector YOLO; ``ImportError`` si faltan dependencias de instalación."""
     p = Path(weights_path)
     if not p.is_file():
         raise FileNotFoundError(f"No existe el archivo de pesos YOLO: {p}")
@@ -329,6 +329,6 @@ def load_yolo_detector(weights_path: Path) -> YoloTurnstileDetector:
         return YoloTurnstileDetector(p)
     except ImportError as e:
         raise ImportError(
-            "Instala el extra de visión: pip install 'camoufox-turnstile[yolo]' "
+            "Instala dependencias: pip install camoufox-turnstile "
             "(y torch según tu plataforma)."
         ) from e

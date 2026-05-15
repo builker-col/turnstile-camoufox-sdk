@@ -10,36 +10,32 @@ Esta guía explica cómo añadir el SDK a un proyecto **existente** (CLI, scrape
 |------------|--------|
 | Python | 3.10 o superior |
 | Sistema | Donde puedas ejecutar **Camoufox** (Firefox embebido) |
-| Red | La primera vez en modo YOLO el SDK **descarga solo** el `.pt` (sin pasos manuales); luego queda en caché en disco (ver sección 7). |
+| Red | La primera ejecución de `solve_on_page` puede **descargar solo** el `.pt`; luego queda en caché en disco (ver sección 7). |
 
 ---
 
 ## 2. Añadir la dependencia al proyecto
 
-### Solo heurística DOM (sin modelo YOLO)
-
-Útil si quieres dependencias más ligeras (no instala `ultralytics` ni OpenCV para inferencia):
+El wheel incluye **Ultralytics y OpenCV** como dependencias del paquete base (inferencia YOLO siempre disponible sin extras).
 
 ```bash
 pip install camoufox-turnstile
 ```
 
-### Modo recomendado: DOM + YOLO
+Extras opcionales:
+
+- **`[s3]`**: descarga de pesos desde un bucket AWS privado (`boto3`).
 
 ```bash
-pip install "camoufox-turnstile[yolo]"
+pip install 'camoufox-turnstile[s3]'
 ```
 
-Si además descargas pesos desde un bucket **privado** S3:
-
-```bash
-pip install "camoufox-turnstile[yolo,s3]"
-```
+> El extra **`[yolo]`** existe vacío solo por compatibilidad con proyectos antiguos; desde **v0.2.0** no añade paquetes adicionales.
 
 ### `requirements.txt`
 
 ```text
-camoufox-turnstile[yolo]>=0.1.0
+camoufox-turnstile>=0.2.0
 ```
 
 ### `pyproject.toml` (PEP 621)
@@ -47,7 +43,7 @@ camoufox-turnstile[yolo]>=0.1.0
 ```toml
 [project]
 dependencies = [
-  "camoufox-turnstile[yolo]>=0.1.0",
+  "camoufox-turnstile>=0.2.0",
 ]
 ```
 
@@ -72,7 +68,7 @@ En **Docker**, ejecuta esto en la capa de build o en el entrypoint antes de abri
 Flujo típico:
 
 1. Abrir `AsyncCamoufox`.
-2. Crear contexto con `camoufox_context_options(..., use_yolo=True)` si usas YOLO (fija `device_scale_factor=1` alineado con las capturas).
+2. Crear contexto con `camoufox_context_options(...)` (fija `device_scale_factor=1` alineado con las capturas YOLO).
 3. `page.goto(...)` a la URL donde está el widget.
 4. `await solve_on_page(page, SolveOptions(...))` → obtienes el **token** en `result.token`.
 
@@ -91,7 +87,6 @@ async def obtener_token_turnstile(url: str, *, headless: bool = True) -> str:
         ctx = await browser.new_context(
             **camoufox_context_options(
                 viewport=DEFAULT_VIEWPORT,
-                use_yolo=True,
             )
         )
         page = await ctx.new_page()
@@ -130,12 +125,12 @@ Ejemplos de campos que suele tocar un integrador:
 
 | Campo | Uso |
 |--------|-----|
-| `use_yolo=False` | Solo clics heurísticos en el iframe (sin `opencv`/`ultralytics` para inferencia). |
-| `token_timeout_ms` | Tiempo máximo de espera del token (también acota el bucle de polling en modo YOLO). |
+| `token_timeout_ms` | Tiempo máximo de espera del token (también acota el bucle de polling YOLO). |
 | `iframe_wait_sec` | Espera inicial para que monte el iframe antes de asistir. |
 | `yolo_weights` | `Path` a un `.pt` local; si es `None`, se usa `ensure_yolo_weights()` (caché + URL por defecto o variables de entorno). |
 | `vision_poll_interval_sec` | Pausa entre capturas en el bucle YOLO. |
 | `max_yolo_clicks` / `max_dom_attempts` | Límites de interacción para no spamear el widget. |
+| `use_dom_fallback` | Si es `False`, no se aplican clics heurísticos sobre el iframe cuando la inferencia devuelve `none`. |
 | `refresh_yolo_weights` | `True`: ignora caché del `.pt` y vuelve a descargar (misma URL en S3). |
 
 Lista completa en el código: `camoufox_turnstile.solve.SolveOptions`.
@@ -144,7 +139,7 @@ Lista completa en el código: `camoufox_turnstile.solve.SolveOptions`.
 
 ## 7. Pesos del modelo: descarga **automática** (cero pasos manuales)
 
-Con `pip install "camoufox-turnstile[yolo]"` y **`SolveOptions()` sin `yolo_weights`** (y sin variable `TURNSTILE_YOLO_WEIGHTS`), la primera llamada a `solve_on_page(..., use_yolo=True)` ejecuta `ensure_yolo_weights()` internamente: **descarga sola** `turnstile-yolo-latest.pt` desde la URL pública de Builker Open Models, la guarda en la caché de usuario (`platformdirs`) y las siguientes ejecuciones **solo leen disco**.
+Con `pip install camoufox-turnstile` y **`SolveOptions()` sin `yolo_weights`** (y sin variable `TURNSTILE_YOLO_WEIGHTS`), la primera llamada a `solve_on_page` ejecuta `ensure_yolo_weights()` internamente: **descarga sola** `turnstile-yolo-latest.pt` desde la URL pública de Builker Open Models, la guarda en la caché de usuario (`platformdirs`) y las siguientes ejecuciones **solo leen disco**.
 
 Para **volver a bajar** el mismo nombre de archivo (p. ej. sustituiste el objeto en S3 y la URL no cambió): `TURNSTILE_YOLO_FORCE_DOWNLOAD=1`, o `SolveOptions(refresh_yolo_weights=True)`, o `ensure_yolo_weights(force_download=True)`.
 

@@ -1,4 +1,4 @@
-"""SDK Camoufox + Turnstile (DOM / YOLO con polling) para Playwright async."""
+"""SDK Camoufox + Turnstile con inferencia YOLO (polling) para Playwright async."""
 
 from __future__ import annotations
 

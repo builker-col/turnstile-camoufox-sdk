@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "camoufox-turnstile"
-version = "0.1.0"
-description = "SDK Python: Camoufox + asistencia Turnstile (DOM o YOLO con polling) para Playwright async."
+version = "0.2.0"
+description = "SDK Python: Camoufox + Turnstile con inferencia YOLO (polling) y fallback DOM opcional para Playwright async."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
@@ -27,13 +27,12 @@ dependencies = [
   "playwright>=1.40.0",
   "platformdirs>=4.0.0",
   "numpy>=1.24.0",
-]
-
-[project.optional-dependencies]
-yolo = [
   "ultralytics>=8.0.0,<9",
   "opencv-python-headless>=4.8.0",
 ]
+
+[project.optional-dependencies]
+yolo = []
 s3 = ["boto3>=1.28.0"]
 dev = ["pytest>=7.4.0", "pytest-asyncio>=0.23.0", "build>=1.0.0"]
 

@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Literal, cast
 from playwright.async_api import Page
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
-from camoufox_turnstile.assist import assist_turnstile_clicks, try_click_turnstile_widget
+from camoufox_turnstile.assist import try_click_turnstile_widget
 from camoufox_turnstile.weights import ensure_yolo_weights
 
 if TYPE_CHECKING:
@@ -43,7 +43,6 @@ class SolveOptions:
     nav_timeout_ms: int = 90_000
     token_timeout_ms: int = 120_000
     iframe_wait_sec: float = 7.0
-    use_yolo: bool = True
     yolo_weights: Path | str | None = None
     yolo_conf: float = 0.4
     success_mark_conf_min: float | None = None
@@ -122,9 +121,10 @@ async def solve_on_page(page: Page, options: SolveOptions | None = None) -> Solv
     """
     Asiste el widget Turnstile en ``page`` y devuelve el token.
 
-    Con ``use_yolo=True`` (por defecto) ejecuta un bucle de captura + inferencia
-    hasta obtener token o agotar ``token_timeout_ms``. Con ``use_yolo=False``
-    usa solo la heurística DOM (dos rondas) y luego espera el token.
+    Siempre ejecuta el bucle de captura + inferencia YOLO hasta obtener token o
+    agotar ``token_timeout_ms``. Si ``use_dom_fallback`` es True, pueden
+    ejecutarse clics heurísticos sobre el iframe cuando no hay una sugerencia
+    YOLO clara.
     """
     opt = options or SolveOptions()
     sm_min = opt.success_mark_conf_min if opt.success_mark_conf_min is not None else opt.yolo_conf
@@ -153,26 +153,6 @@ async def solve_on_page(page: Page, options: SolveOptions | None = None) -> Solv
             success_mark_confidence=None,
             yolo_clicks=0,
             dom_attempts=0,
-        )
-
-    if not opt.use_yolo:
-        await assist_turnstile_clicks(
-            page,
-            nav_timeout_ms=opt.nav_timeout_ms,
-            iframe_wait_sec=opt.iframe_wait_sec,
-        )
-        ms = await remaining_ms()
-        if ms <= 0:
-            raise TurnstileTokenTimeout("Tiempo agotado antes de esperar token (modo DOM).")
-        token = await wait_turnstile_token(page, timeout_ms=ms)
-        return SolveResult(
-            token=token,
-            visual_ok_via="none",
-            vision_iterations=0,
-            checkbox_clicked=False,
-            success_mark_confidence=None,
-            yolo_clicks=0,
-            dom_attempts=1,
         )
 
     weights: Path

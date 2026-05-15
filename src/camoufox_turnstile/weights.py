@@ -63,7 +63,7 @@ def _download_https(url: str, dest: Path) -> None:
     try:
         req = urllib.request.Request(
             url,
-            headers={"User-Agent": "camoufox-turnstile/0.1 (+https://pypi.org/project/camoufox-turnstile/)"},
+            headers={"User-Agent": "camoufox-turnstile/0.2 (+https://pypi.org/project/camoufox-turnstile/)"},
         )
         # Modelos .pt pueden ser grandes; streaming evita cargar todo en RAM.
         with urllib.request.urlopen(req, timeout=600) as resp:  # noqa: S310

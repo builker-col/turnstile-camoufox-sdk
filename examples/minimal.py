@@ -1,17 +1,16 @@
 """
-Ejemplo mínimo: abre una URL con Camoufox y resuelve Turnstile.
+Ejemplo mínimo: abre una URL con Camoufox y resuelve Turnstile con YOLO.
 
 La URL por defecto es el **Turnstile Lab** público de Builker (página dedicada a pruebas):
 
     https://turnstile-lab.builker.com/
 
-Uso (tras ``camoufox fetch`` y pesos YOLO o modo DOM)::
+Uso (tras ``camoufox fetch``; los pesos YOLO se resuelven por caché o descarga automática)::
 
     python examples/minimal.py
     python examples/minimal.py https://turnstile-lab.builker.com/ --headless
 
-Requiere variables de entorno o argumentos para pesos en modo YOLO
-(ver README del paquete ``camoufox-turnstile``).
+Ver README del paquete ``camoufox-turnstile`` para variables de entorno de pesos.
 """
 
 from __future__ import annotations
@@ -40,24 +39,15 @@ async def main() -> int:
         help=f"URL con Turnstile (por defecto: {DEFAULT_LAB_URL})",
     )
     p.add_argument("--headless", action="store_true", help="Navegador sin ventana")
-    p.add_argument(
-        "--dom-only",
-        action="store_true",
-        help="Solo heurística DOM (sin instalar extra [yolo])",
-    )
     args = p.parse_args()
 
-    use_yolo = not args.dom_only
     async with AsyncCamoufox(headless=args.headless) as browser:
         ctx = await browser.new_context(
-            **camoufox_context_options(
-                viewport=DEFAULT_VIEWPORT,
-                use_yolo=use_yolo,
-            )
+            **camoufox_context_options(viewport=DEFAULT_VIEWPORT)
         )
         page = await ctx.new_page()
         await page.goto(args.url, wait_until="load")
-        opt = SolveOptions(use_yolo=use_yolo, iframe_wait_sec=4.0, token_timeout_ms=120_000)
+        opt = SolveOptions(iframe_wait_sec=4.0, token_timeout_ms=120_000)
         result = await solve_on_page(page, opt)
         print(
             "OK:",
