@@ -15,25 +15,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "camoufox-turnstile · SDK Python",
+    default: "Documentación · camoufox-turnstile",
     template: "%s · camoufox-turnstile",
   },
   description:
-    "Integra Cloudflare Turnstile en automatizaciones con Camoufox y Playwright async. Modo visión YOLO o solo DOM.",
+    "SDK Python para Cloudflare Turnstile con Camoufox, Playwright async e inferencia YOLO en el paquete base.",
   keywords: [
     "Turnstile",
     "Cloudflare",
     "Camoufox",
     "Playwright",
     "Python",
+    "YOLO",
     "SDK",
-    "automation",
   ],
   authors: [{ name: "Builker", url: "https://builker.com" }],
   openGraph: {
-    title: "camoufox-turnstile — SDK Python",
+    title: "camoufox-turnstile — Documentación",
     description:
-      "Turnstile con Camoufox y Playwright: modo YOLO con inferencia y heurística DOM.",
+      "Integración Turnstile con YOLO, pesos automáticos y fallback DOM opcional.",
     type: "website",
     locale: "es_ES",
   },
@@ -45,11 +45,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
-    >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+    <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="min-h-screen scroll-smooth font-sans text-slate-900 antialiased">
+        {children}
+      </body>
     </html>
   );
 }
