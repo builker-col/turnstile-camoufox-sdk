@@ -15,6 +15,8 @@ Para probar el SDK puedes usar el **Turnstile Lab** público: [https://turnstile
 
 **Guía paso a paso para integrarlo en cualquier proyecto Python:** [INTEGRACION.md](https://github.com/builker-col/turnstile-camoufox-sdk/blob/main/INTEGRACION.md) (enlace absoluto para lectura desde [PyPI](https://pypi.org/project/camoufox-turnstile/)).
 
+**Landing / sitio promocional:** el repo incluye una app Next.js en la carpeta **`site/`**. Desarrollo local: `cd site && npm install && npm run dev` (por defecto [http://localhost:3000](http://localhost:3000)).
+
 ```bash
 pip install camoufox-turnstile
 ```
